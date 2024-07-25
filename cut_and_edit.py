@@ -3,7 +3,6 @@ from PIL import Image
 from moviepy.editor import ImageSequenceClip
 import numpy as np
 
-
 def cut_images_in_half_vertical(input_folder, output_folder, standard_size):
     if not os.path.exists(output_folder):
         os.makedirs(output_folder)
@@ -27,7 +26,6 @@ def cut_images_in_half_vertical(input_folder, output_folder, standard_size):
 
     return images
 
-
 def create_pause_challenge_video(images, fixed_left_image, output_video, standard_size):
     left_image = Image.open(fixed_left_image).resize(standard_size)
     width, height = left_image.size
@@ -40,21 +38,19 @@ def create_pause_challenge_video(images, fixed_left_image, output_video, standar
         combined.paste(right_image, (width, 0))
         frames.append(np.array(combined))
 
-    frame_rate = 2  # 0.5 seconds per frame
+    frame_rate = 2  
     clip = ImageSequenceClip(
         [frame for frame in frames for _ in range(frame_rate)], fps=frame_rate)
     clip.write_videofile(output_video, codec="libx264")
-
 
 def main():
     input_folder = "images"
     output_folder = "output/cut_images"
     output_video = "output/video.mp4"
+    #Eixo x é metade do valor final pois as 2 metades serão somadas, fazendo assim com que o video seja 1080x1920
     standard_size = (540, 1920)
     images = cut_images_in_half_vertical(input_folder, output_folder, standard_size)
 
-
-    # Assuming you want to use the right half of the first image as the fixed right image
     fixed_left_image = images[0][0]
 
     create_pause_challenge_video(images, fixed_left_image, output_video, standard_size)
